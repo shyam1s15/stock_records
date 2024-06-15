@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:stock_records/models/stock_record.dart';
@@ -37,7 +39,7 @@ class ListingController extends GetxController with StateMixin {
     if (page == 0) {
       change(null, status: RxStatus.loading());
     }
-    
+
     ResponseModel<StockRecordList?> apiResp =
         await apiservice.getStockRecordList(page);
     if (apiResp.errorInfo.error > 0) {
@@ -48,10 +50,32 @@ class ListingController extends GetxController with StateMixin {
       }
       if (page == 0) {
         change(apiResp.content?.records?.first.id?.oid,
-          status: RxStatus.success());
+            status: RxStatus.success());
       }
       page = page += 1;
     }
     isLoading.value = false;
+  }
+
+  void refreshStockRecords() async {
+    isLoading.value = true;
+    scrollController.animateTo(
+      0,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+    change(null, status: RxStatus.loading());
+    await apiservice.updateStockRecords();
+    isLoading.value = false;
+    page = 0;
+    stockData.clear();
+    fetchStockRecords();
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    scrollController.dispose();
   }
 }

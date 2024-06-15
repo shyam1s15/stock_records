@@ -16,14 +16,21 @@ class Apiservice {
         body: {'page': page});
   }
 
+  Future<ResponseModel<void>> updateStockRecords() async {
+    return post(null,
+        endpoint:
+            "https://asia-south1-sheraa-95d17.cloudfunctions.net/stock-records",
+        body: {});
+  }
+
   Future<ResponseModel<T?>> post<T>(
-    T Function(Map<String, dynamic> json) fromJson, {
-    required String endpoint,
-    JSON? body,
-    JSON? query,
-    Map<String, String>? headers,
-    bool requiresAuthToken = false,
-  }) async {
+      T Function(Map<String, dynamic> json)? fromJson,
+      {required String endpoint,
+      JSON? body,
+      JSON? query,
+      Map<String, String>? headers,
+      bool requiresAuthToken = false,
+      bool printLog = false}) async {
     var customHeaders = {
       'Accept': 'application/json',
       if (requiresAuthToken) 'Authorization': '',
@@ -34,13 +41,21 @@ class Apiservice {
       customHeaders.addAll(headers);
     }
 
-    final response = await _baseProvider.post(endpoint, body,
-        headers: customHeaders, query: query);
-    //dynamic responseBody = json.decode(response.body);
+    try {
+      final response = await _baseProvider.post(endpoint, body,
+          headers: customHeaders, query: query);
+      ResponseModel<T?> apiResp =
+          ResponseModel.fromJson(response.body, fromJson);
 
-    // return response.body;
-    // print(response.bodyString);
-    ResponseModel<T?> apiResp = ResponseModel.fromJson(response.body, fromJson);
-    return apiResp;
+      // dynamic responseBody = json.decode(response.body);
+      if (printLog) {
+        print(response.bodyString);
+      }
+      return apiResp;
+    } on Exception catch (e) {
+      print("exception ::: $e");
+      return ResponseModel(
+          content: null, errorInfo: ErrorInfo(error: 1, message: "$e"));
+    }
   }
 }

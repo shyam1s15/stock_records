@@ -8,6 +8,6 @@ class BaseProvider extends GetConnect {
     //httpClient.baseUrl = ApiConstants.baseUrl;
     httpClient.addRequestModifier(requestInterceptor);
     httpClient.addResponseModifier(responseInterceptor);
-    httpClient.timeout = const Duration(seconds: 15);
+    httpClient.timeout = const Duration(seconds: 10);
   }
 }

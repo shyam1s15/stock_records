@@ -22,12 +22,19 @@ import 'package:stock_records/widgets/stock_list_tile.dart';
 // }
 
 class StockListingPage extends GetView<ListingController> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Stock List made by Shyam'),
+        title: ListTile(
+          title: Text('Stock List made by Shyam'),
+          trailing: ElevatedButton(
+            child: Text('Refresh'),
+            onPressed: () {
+              controller.refreshStockRecords();
+            },
+          ),
+        ),
       ),
       body: controller.obx(
         (state) {
