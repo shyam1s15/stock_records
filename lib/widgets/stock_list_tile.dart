@@ -27,7 +27,7 @@ class StockRecordTile extends StatelessWidget {
         stockRecord.currentPrice, stockRecord.targetPrice)) {
       backgroundColor = Colors.orange;
     }
-    
+
     return GestureDetector(
       onTap: () {
         Clipboard.setData(
@@ -104,6 +104,19 @@ class StockRecordTile extends StatelessWidget {
                 decoration: InputDecoration(labelText: 'Near Target Price'),
                 controller: nearTargetPriceController,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a near target price.';
+                  }
+
+                  // Attempt to convert the value to a double
+                  try {
+                    double.parse(value);
+                    return null; // Value is valid (a double)
+                  } on FormatException {
+                    return 'Invalid input: Please enter a number.';
+                  }
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Note'),

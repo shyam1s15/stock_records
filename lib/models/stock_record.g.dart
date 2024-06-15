@@ -20,6 +20,8 @@ StockRecord _$StockRecordFromJson(Map<String, dynamic> json) => StockRecord(
       changePer: (json['change_per'] as num?)?.toDouble(),
       accelerate: json['accelerate'] as bool?,
       volume: (json['volume'] as num?)?.toInt(),
+      note: json['note'] as String?,
+      targetPrice: (json['target_price'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$StockRecordToJson(StockRecord instance) =>
@@ -34,6 +36,8 @@ Map<String, dynamic> _$StockRecordToJson(StockRecord instance) =>
       'change_per': instance.changePer,
       'accelerate': instance.accelerate,
       'volume': instance.volume,
+      'target_price': instance.targetPrice,
+      'note': instance.note,
     };
 
 Id _$IdFromJson(Map<String, dynamic> json) => Id(
