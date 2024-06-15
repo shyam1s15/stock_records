@@ -9,11 +9,11 @@ class Apiservice {
 
   Apiservice(this._baseProvider);
 
-  Future<ResponseModel<StockRecordList?>> getStockRecordList() async {
+  Future<ResponseModel<StockRecordList?>> getStockRecordList(int page) async {
     return post(StockRecordList.fromJson,
         endpoint:
             "https://asia-south1-sheraa-95d17.cloudfunctions.net/stock-records-listing",
-        body: {});
+        body: {'page': page});
   }
 
   Future<ResponseModel<T?>> post<T>(

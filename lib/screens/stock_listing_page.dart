@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:stock_records/controllers/listing_controller.dart';
 import 'package:stock_records/routes.dart';
+import 'package:stock_records/widgets/stock_list_tile.dart';
 
 // class StockListingPage extends StatefulWidget {
 //   const StockListingPage({super.key});
@@ -21,24 +22,48 @@ import 'package:stock_records/routes.dart';
 // }
 
 class StockListingPage extends GetView<ListingController> {
+
   @override
   Widget build(BuildContext context) {
-    // return ConcentricAnimationOnboarding();
-
-    return controller.obx(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Stock List made by Shyam'),
+      ),
+      body: controller.obx(
         (state) {
           if (state == null) {
             return _isLoading();
           }
-          // return _build(context: context);
-          return ConcentricAnimationOnboarding();
+          return Obx(() {
+            return ListView.builder(
+              controller: controller.scrollController,
+              itemCount: controller.stockData.length +
+                  (controller.isLoading.value ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index == controller.stockData.length) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return StockRecordTile(
+                  stockRecord: controller.stockData[index],
+                );
+              },
+            );
+          });
         },
         onLoading: _isLoading(),
-        onEmpty: _emptyListWidet(),
+        onEmpty: _emptyListWidget(),
         onError: (error) {
           print(error);
-          return _emptyListWidet();
-        });
+          return _emptyListWidget();
+        },
+      ),
+    );
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 
   Widget _isLoading() {
@@ -49,7 +74,7 @@ class StockListingPage extends GetView<ListingController> {
     );
   }
 
-  Widget _emptyListWidet() {
+  Widget _emptyListWidget() {
     return Scaffold(
       appBar: AppBar(title: Text('Some Text')),
       body: SafeArea(
