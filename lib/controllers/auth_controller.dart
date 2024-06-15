@@ -7,10 +7,11 @@ import 'package:stock_records/routes.dart';
 class AuthController extends GetxController {
   void signInWithGoogle() async {
     try {
-      FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      FirebaseAuth.instance.authStateChanges().listen((User? user) async {
         if (user == null || AppPreferences.userToken == null) {
           print('User is currently signed out!');
         } else {
+          AppPreferences.userToken = await user.getIdToken();
           Get.toNamed(Routes.RECORDS);
           return;
         }
