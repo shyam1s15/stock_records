@@ -58,4 +58,11 @@ class Apiservice {
           content: null, errorInfo: ErrorInfo(error: 1, message: "$e"));
     }
   }
+
+  Future<void> saveTargetPriceAndNote(String? id, String target, String note) {
+    return post(null,
+        endpoint:
+            "https://asia-south1-sheraa-95d17.cloudfunctions.net/stock_record_target_function",
+        body: {"id": id, "target_price": target, "note": note});
+  }
 }

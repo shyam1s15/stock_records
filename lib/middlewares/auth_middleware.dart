@@ -2,16 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/route_middleware.dart';
-import 'package:get/get_utils/src/platform/platform.dart';
 import 'package:stock_records/controllers/app_preference_service.dart';
 import 'package:stock_records/routes.dart';
 
-class PlatformMiddleware extends GetMiddleware {
+class AuthMiddleware extends GetMiddleware {
   // priority this value the smaller the better
   @override
   int? priority = 0;
 
-  PlatformMiddleware({required this.priority});
+  AuthMiddleware({required this.priority});
 
   @override
   RouteSettings? redirect(String? route) {
@@ -23,8 +22,10 @@ class PlatformMiddleware extends GetMiddleware {
       }
     });
     if (!isUserSignedIn) {
-        return const RouteSettings(name: Routes.WELCOME_SCREEN);
+      print("token :::" + (AppPreferences.userToken ?? ""));
+      return const RouteSettings(name: Routes.WELCOME_SCREEN);
     }
+    print("token :::" + (AppPreferences.userToken ?? ""));
     return null;
   }
 }

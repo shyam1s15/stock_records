@@ -26,6 +26,7 @@ class AuthController extends GetxController {
       UserCredential credential =
           await FirebaseAuth.instance.signInWithPopup(googleProvider);
       AppPreferences.userToken = await credential.user?.getIdToken();
+      print("token after auth :::" + (AppPreferences.userToken ?? ""));
       Get.toNamed(Routes.RECORDS);
     } catch (error) {
       print('Error signing in with Google: $error');

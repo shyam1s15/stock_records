@@ -32,7 +32,7 @@ class App extends StatelessWidget {
       themeMode: getThemeMode(themeController.theme),
       getPages: Routes.routes,
       // initialRoute: Routes.WELCOME_SCREEN,
-      initialRoute: Routes.WELCOME_SCREEN,
+      initialRoute: Routes.RECORDS,
       initialBinding: AppBinding(),
       defaultTransition: Transition.fade,
       opaqueRoute: Get.isOpaqueRouteDefault,
