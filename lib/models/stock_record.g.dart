@@ -21,7 +21,8 @@ StockRecord _$StockRecordFromJson(Map<String, dynamic> json) => StockRecord(
       accelerate: json['accelerate'] as bool?,
       volume: (json['volume'] as num?)?.toInt(),
       note: json['note'] as String?,
-      targetPrice: (json['target_price'] as num?)?.toDouble(),
+      targetPrice:
+          StockRecord._stringToDoubleFromJson(json['target_price'] as String?),
     );
 
 Map<String, dynamic> _$StockRecordToJson(StockRecord instance) =>

@@ -35,26 +35,25 @@ class StockRecord {
 
   final int? volume;
 
-  @JsonKey(name: 'target_price')
-  final double? targetPrice;
+  @JsonKey(name: 'target_price', fromJson: _stringToDoubleFromJson)
+  double? targetPrice;
 
   @JsonKey(name: 'note')
-  final String? note;
+  String? note;
 
-  StockRecord({
-    this.id,
-    this.stockSymbol,
-    this.stockName,
-    this.priceDate,
-    this.lastUpdated,
-    this.currentPrice,
-    this.previousPrice,
-    this.changePer,
-    this.accelerate,
-    this.volume,
-    this.note,
-    this.targetPrice
-  });
+  StockRecord(
+      {this.id,
+      this.stockSymbol,
+      this.stockName,
+      this.priceDate,
+      this.lastUpdated,
+      this.currentPrice,
+      this.previousPrice,
+      this.changePer,
+      this.accelerate,
+      this.volume,
+      this.note,
+      this.targetPrice});
 
   factory StockRecord.fromJson(Map<String, dynamic> json) =>
       _$StockRecordFromJson(json);
@@ -62,6 +61,15 @@ class StockRecord {
 
   static DateTime? _dateTimeFromJson(Map<String, dynamic>? json) {
     return json != null ? DateTime.parse(json[r'$date'] as String) : null;
+  }
+
+  static double? _stringToDoubleFromJson(String? targetPrice) {
+    // final targetPrice = json?['target_price'] as String?;
+    if (targetPrice != null) {
+      return double.tryParse(targetPrice);
+    } else {
+      return null; // Handle null case
+    }
   }
 
   static Map<String, dynamic>? _dateTimeToJson(DateTime? dateTime) =>

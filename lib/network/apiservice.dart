@@ -59,7 +59,7 @@ class Apiservice {
     }
   }
 
-  Future<void> saveTargetPriceAndNote(String? id, String target, String note) {
+  Future<void> saveTargetPriceAndNote(String? id, double? target, String note) {
     return post(null,
         endpoint:
             "https://asia-south1-sheraa-95d17.cloudfunctions.net/stock_record_target_function",

@@ -5,36 +5,47 @@ import 'package:stock_records/controllers/stock_controller.dart';
 import 'package:stock_records/models/stock_record.dart';
 import 'package:stock_records/utils/utility.dart';
 
-class StockRecordTile extends StatelessWidget {
-  final StockRecord stockRecord;
-  final StockController stockController = Get.find();
+class StockRecordTile extends StatefulWidget {
+  StockRecord stockRecord;
 
   StockRecordTile({required this.stockRecord});
 
   @override
-  Widget build(BuildContext context) {
-    Color backgroundColor = Colors.white; // Default color
+  State<StockRecordTile> createState() => _StockRecordTileState();
+}
 
-    if (stockRecord.changePer != null) {
-      if (stockRecord.changePer! > 5) {
+class _StockRecordTileState extends State<StockRecordTile> {
+  final StockController stockController = Get.find();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Color backgroundColor = Colors.white; // Default co
+    if (widget.stockRecord.changePer != null) {
+      if (widget.stockRecord.changePer! > 5) {
         backgroundColor = Colors.lightGreen;
-      } else if (stockRecord.changePer! < -5) {
+      } else if (widget.stockRecord.changePer! < -5) {
         backgroundColor = Colors.redAccent;
       }
     }
 
     if (isPriceWithinTolerance(
-        stockRecord.currentPrice, stockRecord.targetPrice)) {
+        widget.stockRecord.currentPrice, widget.stockRecord.targetPrice)) {
       backgroundColor = Colors.orange;
     }
 
     return GestureDetector(
       onTap: () {
         Clipboard.setData(
-            ClipboardData(text: stockRecord.stockSymbol ?? 'N/A'));
+            ClipboardData(text: widget.stockRecord.stockSymbol ?? 'N/A'));
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text('${stockRecord.stockSymbol} copied to clipboard')),
+              content: Text(
+                  '${widget.stockRecord.stockSymbol} copied to clipboard')),
         );
         /*showModalBottomSheet(
           context: context,
@@ -53,24 +64,24 @@ class StockRecordTile extends StatelessWidget {
             ListTile(
               leading:
                   Icon(Icons.trending_up), // You can use an appropriate icon
-              title: Text(stockRecord.stockName ?? 'Unknown Stock'),
+              title: Text(widget.stockRecord.stockName ?? 'Unknown Stock'),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Symbol: ${stockRecord.stockSymbol ?? 'N/A'}'),
+                  Text('Symbol: ${widget.stockRecord.stockSymbol ?? 'N/A'}'),
                   Text(
-                      'Current Price: ₹${stockRecord.currentPrice?.toStringAsFixed(2) ?? 'N/A'}'),
+                      'Current Price: ₹${widget.stockRecord.currentPrice?.toStringAsFixed(2) ?? 'N/A'}'),
                   Text(
-                      'Previous Price: ₹${stockRecord.previousPrice?.toStringAsFixed(2) ?? 'N/A'}'),
+                      'Previous Price: ₹${widget.stockRecord.previousPrice?.toStringAsFixed(2) ?? 'N/A'}'),
                   Text(
-                      'Change: ${stockRecord.changePer?.toStringAsFixed(2) ?? 'N/A'}%'),
+                      'Change: ${widget.stockRecord.changePer?.toStringAsFixed(2) ?? 'N/A'}%'),
                 ],
               ),
               trailing: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Updated: ${stockRecord.lastUpdated != null ? _formatDate(stockRecord.lastUpdated!) : 'N/A'}',
+                    'Updated: ${widget.stockRecord.lastUpdated != null ? _formatDate(widget.stockRecord.lastUpdated!) : 'N/A'}',
                     style: TextStyle(fontSize: 12),
                   ),
                 ],
@@ -85,14 +96,14 @@ class StockRecordTile extends StatelessWidget {
   }
 
   Widget _buildHiddenTile() {
-    TextEditingController nearTargetPriceController =
-        TextEditingController(text: stockRecord.targetPrice?.toString() ?? '');
+    TextEditingController nearTargetPriceController = TextEditingController(
+        text: widget.stockRecord.targetPrice?.toString() ?? '');
     TextEditingController noteController =
-        TextEditingController(text: stockRecord.note?.toString() ?? '');
+        TextEditingController(text: widget.stockRecord.note?.toString() ?? '');
 
     return ExpansionTile(
-      title: Text(stockRecord.targetPrice != null
-          ? 'Target Price : ${stockRecord.targetPrice}'
+      title: Text(widget.stockRecord.targetPrice != null
+          ? 'Target Price : ${widget.stockRecord.targetPrice}'
           : 'Set Target Price'),
       children: [
         Padding(
@@ -126,8 +137,16 @@ class StockRecordTile extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   // Save logic here
-                  stockController.saveTargetPriceAndNote(stockRecord.id?.oid,
-                      nearTargetPriceController.text, noteController.text);
+                  double? target_price =
+                      double.tryParse(nearTargetPriceController.text);
+                  String? note = noteController.text;
+                  stockController.saveTargetPriceAndNote(
+                      widget.stockRecord.id?.oid, target_price, note);
+
+                  setState(() {
+                    widget.stockRecord.targetPrice = target_price;
+                    widget.stockRecord.note = note;
+                  });
                 },
                 child: Text('Save'),
               ),
@@ -150,19 +169,19 @@ class StockRecordTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            stockRecord.stockName ?? 'Unknown Stock',
+            widget.stockRecord.stockName ?? 'Unknown Stock',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 8),
-          Text('Symbol: ${stockRecord.stockSymbol ?? 'N/A'}'),
+          Text('Symbol: ${widget.stockRecord.stockSymbol ?? 'N/A'}'),
           Text(
-              'Current Price: ₹${stockRecord.currentPrice?.toStringAsFixed(2) ?? 'N/A'}'),
+              'Current Price: ₹${widget.stockRecord.currentPrice?.toStringAsFixed(2) ?? 'N/A'}'),
           Text(
-              'Previous Price: ₹${stockRecord.previousPrice?.toStringAsFixed(2) ?? 'N/A'}'),
+              'Previous Price: ₹${widget.stockRecord.previousPrice?.toStringAsFixed(2) ?? 'N/A'}'),
           Text(
-              'Change: ${stockRecord.changePer?.toStringAsFixed(2) ?? 'N/A'}%'),
+              'Change: ${widget.stockRecord.changePer?.toStringAsFixed(2) ?? 'N/A'}%'),
           Text(
-            'Last Updated: ${stockRecord.lastUpdated != null ? _formatDate(stockRecord.lastUpdated!) : 'N/A'}',
+            'Last Updated: ${widget.stockRecord.lastUpdated != null ? _formatDate(widget.stockRecord.lastUpdated!) : 'N/A'}',
           ),
         ],
       ),

@@ -5,7 +5,7 @@ import 'package:stock_records/network/apiservice.dart';
 class StockController extends GetxController {
   Apiservice apiservice = Get.find();
 
-  void saveTargetPriceAndNote(String? id, String target, String note) async {
+  void saveTargetPriceAndNote(String? id, double? target, String note) async {
     await apiservice.saveTargetPriceAndNote(id, target, note);
   }
 }
