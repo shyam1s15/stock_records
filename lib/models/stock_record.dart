@@ -63,12 +63,19 @@ class StockRecord {
     return json != null ? DateTime.parse(json[r'$date'] as String) : null;
   }
 
-  static double? _stringToDoubleFromJson(String? targetPrice) {
-    // final targetPrice = json?['target_price'] as String?;
-    if (targetPrice != null) {
+  static double? _stringToDoubleFromJson(dynamic targetPrice) {
+    if (targetPrice == null) {
+      return null;
+    }
+
+    if (targetPrice is String) {
       return double.tryParse(targetPrice);
+    } else if (targetPrice is int) {
+      return targetPrice.toDouble();
+    } else if (targetPrice is double) {
+      return targetPrice;
     } else {
-      return null; // Handle null case
+      return null;
     }
   }
 

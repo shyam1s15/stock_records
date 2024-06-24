@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:stock_records/models/sort_options.dart';
 import 'package:stock_records/models/stock_record.dart';
 import 'package:stock_records/models/stock_record_list.dart';
 import 'package:stock_records/network/apiservice.dart';
@@ -9,6 +8,8 @@ import 'package:stock_records/network/response_model.dart';
 
 class ListingController extends GetxController with StateMixin {
   Apiservice apiservice = Get.find();
+  String? selectedSortOption = "";
+  String? search = null;
   var stockData = <StockRecord>[].obs;
   var page = 0;
   var isLoading = false.obs;
@@ -41,7 +42,7 @@ class ListingController extends GetxController with StateMixin {
     }
 
     ResponseModel<StockRecordList?> apiResp =
-        await apiservice.getStockRecordList(page);
+        await apiservice.getStockRecordList(page, selectedSortOption, search);
     if (apiResp.errorInfo.error > 0) {
     } else {
       //print(apiResp.content?.records?.first.id?.oid);
@@ -61,11 +62,11 @@ class ListingController extends GetxController with StateMixin {
     isLoading.value = true;
     scrollController.animateTo(
       0,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
     change(null, status: RxStatus.loading());
-    await apiservice.updateStockRecords();
+    apiservice.updateStockRecords();
     isLoading.value = false;
     page = 0;
     stockData.clear();
@@ -77,5 +78,47 @@ class ListingController extends GetxController with StateMixin {
     // TODO: implement onClose
     super.onClose();
     scrollController.dispose();
+  }
+
+  void onSearch(String? search) {
+    this.search = search;
+    change(null, status: RxStatus.loading());
+    isLoading.value = false;
+    page = 0;
+    scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+    stockData.clear();
+    fetchStockRecords();
+  }
+
+  void clearSearch() {
+    this.search = null;
+    change(null, status: RxStatus.loading());
+    isLoading.value = false;
+    page = 0;
+    scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+
+    stockData.clear();
+    fetchStockRecords();
+  }
+
+  void onSort(SortOption? sort) {
+    selectedSortOption = sort?.backendValue;
+    stockData.clear();
+    page = 0;
+    isLoading.value = false;
+    scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+    fetchStockRecords();
   }
 }

@@ -8,7 +8,7 @@ import 'package:stock_records/utils/utility.dart';
 class StockRecordTile extends StatefulWidget {
   StockRecord stockRecord;
 
-  StockRecordTile({required this.stockRecord});
+  StockRecordTile({super.key, required this.stockRecord});
 
   @override
   State<StockRecordTile> createState() => _StockRecordTileState();
@@ -57,13 +57,13 @@ class _StockRecordTileState extends State<StockRecordTile> {
       child: Container(
         decoration: BoxDecoration(
           color: backgroundColor,
-          border: Border(bottom: BorderSide(color: Colors.grey, width: 0.5)),
+          border: const Border(bottom: BorderSide(color: Colors.grey, width: 0.5)),
         ),
         child: Column(
           children: [
             ListTile(
               leading:
-                  Icon(Icons.trending_up), // You can use an appropriate icon
+                  const Icon(Icons.trending_up), // You can use an appropriate icon
               title: Text(widget.stockRecord.stockName ?? 'Unknown Stock'),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,7 +82,7 @@ class _StockRecordTileState extends State<StockRecordTile> {
                 children: [
                   Text(
                     'Updated: ${widget.stockRecord.lastUpdated != null ? _formatDate(widget.stockRecord.lastUpdated!) : 'N/A'}',
-                    style: TextStyle(fontSize: 12),
+                    style: const TextStyle(fontSize: 12),
                   ),
                 ],
               ),
@@ -112,9 +112,9 @@ class _StockRecordTileState extends State<StockRecordTile> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Near Target Price'),
+                decoration: const InputDecoration(labelText: 'Near Target Price'),
                 controller: nearTargetPriceController,
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a near target price.';
@@ -130,25 +130,25 @@ class _StockRecordTileState extends State<StockRecordTile> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Note'),
+                decoration: const InputDecoration(labelText: 'Note'),
                 controller: noteController,
               ),
-              SizedBox(height: 2),
+              const SizedBox(height: 2),
               ElevatedButton(
                 onPressed: () {
                   // Save logic here
-                  double? target_price =
+                  double? targetPrice =
                       double.tryParse(nearTargetPriceController.text);
                   String? note = noteController.text;
                   stockController.saveTargetPriceAndNote(
-                      widget.stockRecord.id?.oid, target_price, note);
+                      widget.stockRecord.id?.oid, targetPrice, note);
 
                   setState(() {
-                    widget.stockRecord.targetPrice = target_price;
+                    widget.stockRecord.targetPrice = targetPrice;
                     widget.stockRecord.note = note;
                   });
                 },
-                child: Text('Save'),
+                child: const Text('Save'),
               ),
             ],
           ),
@@ -170,9 +170,9 @@ class _StockRecordTileState extends State<StockRecordTile> {
         children: [
           Text(
             widget.stockRecord.stockName ?? 'Unknown Stock',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text('Symbol: ${widget.stockRecord.stockSymbol ?? 'N/A'}'),
           Text(
               'Current Price: ₹${widget.stockRecord.currentPrice?.toStringAsFixed(2) ?? 'N/A'}'),

@@ -9,7 +9,7 @@ class ResponseModel<T> {
     // Parse error info
     ErrorInfo errorInfo = ErrorInfo.fromJson(json['response']);
 
-    dynamic parsedContent = null;
+    dynamic parsedContent;
     try {
       if (json['content'] != null && fromJson != null) {
         if (json['content'] is String) {
@@ -44,13 +44,13 @@ class ErrorInfo {
   ErrorInfo({required this.error, required this.message});
 
   ErrorInfo.fromJson(Map<String, dynamic> json)
-      : this.error = json['error'] ?? 0,
-        this.message = json['message'] ?? "";
+      : error = json['error'] ?? 0,
+        message = json['message'] ?? "";
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['error'] = this.error;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['error'] = error;
+    data['message'] = message;
     return data;
   }
 }

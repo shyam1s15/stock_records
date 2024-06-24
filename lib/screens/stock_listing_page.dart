@@ -2,9 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:concentric_transition/concentric_transition.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:stock_records/controllers/listing_controller.dart';
-import 'package:stock_records/routes.dart';
+import 'package:stock_records/widgets/custom_app_bar.dart';
+import 'package:stock_records/widgets/custom_drawer.dart';
+import 'package:stock_records/widgets/filter_drawer.dart';
 import 'package:stock_records/widgets/stock_list_tile.dart';
 
 // class StockListingPage extends StatefulWidget {
@@ -22,20 +23,26 @@ import 'package:stock_records/widgets/stock_list_tile.dart';
 // }
 
 class StockListingPage extends GetView<ListingController> {
+  const StockListingPage({super.key});
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: ListTile(
-          title: Text('Stock List made by Shyam'),
-          trailing: ElevatedButton(
-            child: Text('Refresh'),
-            onPressed: () {
-              controller.refreshStockRecords();
-            },
-          ),
-        ),
-      ),
+      // appBar: AppBar(
+      //   title: ListTile(
+      //     title: const Text('Stock List made by Shyam'),
+      //     trailing: ElevatedButton(
+      //       child: const Text('Refresh'),
+      //       onPressed: () {
+      //         controller.refreshStockRecords();
+      //       },
+      //     ),
+      //   ),
+      // ),
+      appBar: MyCustomAppBar(),
+      drawer: CustomDrawer(),
+      endDrawer: const FilterDrawer(),
       body: controller.obx(
         (state) {
           if (state == null) {
@@ -48,7 +55,7 @@ class StockListingPage extends GetView<ListingController> {
                   (controller.isLoading.value ? 1 : 0),
               itemBuilder: (context, index) {
                 if (index == controller.stockData.length) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
@@ -82,35 +89,32 @@ class StockListingPage extends GetView<ListingController> {
   }
 
   Widget _emptyListWidget() {
-    return Scaffold(
-      appBar: AppBar(title: Text('Some Text')),
-      body: SafeArea(
-        child: ListView(
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                // CustomButton(
-                //   text: 'Add OPD',
-                //   color: Colors.green,
-                //   onPressed: () {
-                //     Get.toNamed(Routes.WELCOME_SCREEN, arguments: {'new_opd': true});
-                //   },
-                // )
-              ],
-            ),
-            CachedNetworkImage(
-              imageUrl:
-                  'https://firebasestorage.googleapis.com/v0/b/sheraa-95d17.appspot.com/o/no-data-image.jpg?alt=media',
-              placeholder: (context, url) =>
-                  CircularProgressIndicator(), // Placeholder widget while loading
-              errorWidget: (context, url, error) => Icon(Icons.error),
-              height: 250,
-              width: 250,
-            ),
-          ],
-        ),
+    return SafeArea(
+      child: ListView(
+        children: [
+          const Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              // CustomButton(
+              //   text: 'Add OPD',
+              //   color: Colors.green,
+              //   onPressed: () {
+              //     Get.toNamed(Routes.WELCOME_SCREEN, arguments: {'new_opd': true});
+              //   },
+              // )
+            ],
+          ),
+          CachedNetworkImage(
+            imageUrl:
+                'https://firebasestorage.googleapis.com/v0/b/sheraa-95d17.appspot.com/o/no-data-image.jpg?alt=media',
+            placeholder: (context, url) =>
+                const CircularProgressIndicator(), // Placeholder widget while loading
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+            height: 250,
+            width: 250,
+          ),
+        ],
       ),
     );
   }
@@ -138,7 +142,7 @@ final pages = [
 ];
 
 class ConcentricAnimationOnboarding extends StatefulWidget {
-  ConcentricAnimationOnboarding({Key? key}) : super(key: key);
+  const ConcentricAnimationOnboarding({super.key});
 
   @override
   State<ConcentricAnimationOnboarding> createState() =>
@@ -150,14 +154,14 @@ class _ConcentricAnimationOnboardingState
   @override
   Widget build(BuildContext context) {
     //final screenWidth = MediaQuery.of(context).size.width;
-    final screenWidth = 50;
+    const screenWidth = 50;
     return Scaffold(
       body: ConcentricPageView(
         colors: pages.map((p) => p.bgColor).toList(),
         radius: screenWidth * 0.45,
         // pageSnapping: true,
-        nextButtonBuilder: (context) => Padding(
-          padding: const EdgeInsets.only(left: 1), // visual center
+        nextButtonBuilder: (context) => const Padding(
+          padding: EdgeInsets.only(left: 1), // visual center
           child: Icon(
             Icons.navigate_next,
             size: screenWidth * 0.5,
@@ -200,12 +204,12 @@ class PageData {
 class _Page extends StatelessWidget {
   final PageData page;
 
-  const _Page({Key? key, required this.page}) : super(key: key);
+  const _Page({required this.page});
 
   @override
   Widget build(BuildContext context) {
     //final screenHeight = MediaQuery.of(context).size.height;
-    final screenHeight = 400;
+    const screenHeight = 400;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

@@ -9,11 +9,11 @@ import 'package:stock_records/routes.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'firebase_options.dart';
 
-void main() async {
+void main() {
   AppPreferences.init();
   setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
+  Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(App());

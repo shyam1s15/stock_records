@@ -34,12 +34,12 @@ class Routes {
     // ),
     GetPage(
         name: RECORDS,
-        page: () => StockListingPage(),
+        page: () => const StockListingPage(),
         binding: ListingPageBindings(),
         middlewares: [AuthMiddleware(priority: 0)]
         ),
-    GetPage(name: WELCOME_SCREEN, page: () => WelcomePage(), binding: AuthBinding(),
-    middlewares: [AuthMiddleware(priority: 0)]
+    GetPage(name: WELCOME_SCREEN, page: () => const WelcomePage(), binding: AuthBinding(),
+    // middlewares: [AuthMiddleware(priority: 0)]
     )
   ];
 }

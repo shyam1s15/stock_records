@@ -14,18 +14,31 @@ class AuthMiddleware extends GetMiddleware {
 
   @override
   RouteSettings? redirect(String? route) {
-    bool isUserSignedIn = true;
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null || AppPreferences.userToken == null) {
-        print('User is currently signed out!');
-        isUserSignedIn = false;
-      }
-    });
-    if (!isUserSignedIn) {
-      print("token :::" + (AppPreferences.userToken ?? ""));
+    // bool isUserSignedIn = true;
+     // Await for the first authentication state change
+    
+    // ***************** UNCOMMENT IT BEFORE DEPLOYING
+    /*User? user = FirebaseAuth.instance.currentUser;
+    if (user == null || AppPreferences.userToken == null && ((route ?? "") != Routes.WELCOME_SCREEN)) {
+      print('User is currently signed out or user token is missing!');
       return const RouteSettings(name: Routes.WELCOME_SCREEN);
     }
-    print("token :::" + (AppPreferences.userToken ?? ""));
-    return null;
+    
+    print("token :::${AppPreferences.userToken ?? ""}");
+    return null;*/
+    // ***************************
+    
+    // FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    //   if (user == null || AppPreferences.userToken == null) {
+    //     print('User is currently signed out!');
+    //     isUserSignedIn = false;
+    //   }
+    // });
+    // if (!isUserSignedIn) {
+    //   print("token :::" + (AppPreferences.userToken ?? ""));
+    //   return const RouteSettings(name: Routes.WELCOME_SCREEN);
+    // }
+    // print("token :::" + (AppPreferences.userToken ?? ""));
+    // return null;
   }
 }

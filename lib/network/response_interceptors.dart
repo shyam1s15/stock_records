@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:get/get_connect.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
-import 'dart:convert';
 
 FutureOr<dynamic> responseInterceptor(
     Request request, Response response) async {
@@ -36,6 +35,7 @@ class AppException implements Exception {
 
   AppException({this.code, this.message, this.details});
 
+  @override
   String toString() {
     return "[$code]: $message \n $details";
   }

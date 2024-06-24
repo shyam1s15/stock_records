@@ -7,11 +7,11 @@ class Themes {
     primarySwatch: Colors.blue,
     brightness: Brightness.light,
     appBarTheme: AppBarTheme(
-      titleTextStyle: TextStyle(
+      titleTextStyle: const TextStyle(
         color: Colors.black,
         fontWeight: FontWeight.w600
       ),
-      iconTheme: IconThemeData(
+      iconTheme: const IconThemeData(
         color: Colors.black
       ),
       backgroundColor: Colors.grey.shade50,
@@ -22,55 +22,55 @@ class Themes {
         borderSide: BorderSide.none,
         borderRadius: BorderRadius.circular(10)
       ),
-      hintStyle: TextStyle(
+      hintStyle: const TextStyle(
         fontSize: 14,
       )
     ),
-    progressIndicatorTheme: ProgressIndicatorThemeData(
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: Colors.red
     ),
     textTheme: TextTheme(
-      displayLarge: TextStyle(
+      displayLarge: const TextStyle(
         letterSpacing: -1.5,
         fontSize: 48,
         color: Colors.black,
         fontWeight: FontWeight.bold
       ),
-      displayMedium: TextStyle(
+      displayMedium: const TextStyle(
         letterSpacing: -1.0,
         fontSize: 40,
         color: Colors.black,
         fontWeight: FontWeight.bold
       ),
-      displaySmall: TextStyle(
+      displaySmall: const TextStyle(
         letterSpacing: -1.0,
         fontSize: 32,
         color: Colors.black,
         fontWeight: FontWeight.bold
       ),
-      headlineLarge: TextStyle(
+      headlineLarge: const TextStyle(
         letterSpacing: -1.0,
         color: Colors.black,
         fontSize: 28,
         fontWeight: FontWeight.w600
       ),
-      headlineMedium: TextStyle(
+      headlineMedium: const TextStyle(
         letterSpacing: -1.0,
         color: Colors.black,
         fontSize: 24,
         fontWeight: FontWeight.w500
       ),
-      headlineSmall: TextStyle(
+      headlineSmall: const TextStyle(
         color: Colors.black,
         fontSize: 18,
         fontWeight: FontWeight.w500
       ),
-      titleLarge: TextStyle(
+      titleLarge: const TextStyle(
         color: Colors.black,
         fontSize: 16,
         fontWeight: FontWeight.w500
       ),
-      titleMedium: TextStyle(
+      titleMedium: const TextStyle(
         color: Colors.black,
         fontSize: 14,
         fontWeight: FontWeight.w500
@@ -85,7 +85,7 @@ class Themes {
         fontSize: 14,
         fontWeight: FontWeight.w400
       ),
-      bodyMedium: TextStyle(
+      bodyMedium: const TextStyle(
         color: Colors.white,
         fontSize: 14,
         fontWeight: FontWeight.w600
@@ -112,7 +112,7 @@ class Themes {
     appBarTheme: AppBarTheme(
       backgroundColor: ColorConstants.gray900,
       elevation: 0,
-      iconTheme: IconThemeData(
+      iconTheme: const IconThemeData(
         color: Colors.white
       ),
     ),
@@ -122,55 +122,55 @@ class Themes {
         borderSide: BorderSide.none,
         borderRadius: BorderRadius.circular(10)
       ),
-      hintStyle: TextStyle(
+      hintStyle: const TextStyle(
         fontSize: 14,
       )
     ),
-    progressIndicatorTheme: ProgressIndicatorThemeData(
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: Colors.white
     ),
     textTheme: TextTheme(
-      displayLarge: TextStyle(
+      displayLarge: const TextStyle(
         letterSpacing: -1.5,
         fontSize: 48,
         color: Colors.black,
         fontWeight: FontWeight.bold
       ),
-      displayMedium: TextStyle(
+      displayMedium: const TextStyle(
         letterSpacing: -1.0,
         fontSize: 40,
         color: Colors.black,
         fontWeight: FontWeight.bold
       ),
-      displaySmall: TextStyle(
+      displaySmall: const TextStyle(
         letterSpacing: -1.0,
         fontSize: 32,
         color: Colors.black,
         fontWeight: FontWeight.bold
       ),
-      headlineLarge: TextStyle(
+      headlineLarge: const TextStyle(
         letterSpacing: -1.0,
         color: Colors.black,
         fontSize: 28,
         fontWeight: FontWeight.w600
       ),
-      headlineMedium: TextStyle(
+      headlineMedium: const TextStyle(
         letterSpacing: -1.0,
         color: Colors.black,
         fontSize: 24,
         fontWeight: FontWeight.w500
       ),
-      headlineSmall: TextStyle(
+      headlineSmall: const TextStyle(
         color: Colors.black,
         fontSize: 18,
         fontWeight: FontWeight.w500
       ),
-      titleLarge: TextStyle(
+      titleLarge: const TextStyle(
         color: Colors.black,
         fontSize: 16,
         fontWeight: FontWeight.w500
       ),
-      titleMedium: TextStyle(
+      titleMedium: const TextStyle(
         color: Colors.black,
         fontSize: 14,
         fontWeight: FontWeight.w500
@@ -185,7 +185,7 @@ class Themes {
         fontSize: 14,
         fontWeight: FontWeight.w400
       ),
-      bodyMedium: TextStyle(
+      bodyMedium: const TextStyle(
         color: Colors.white,
         fontSize: 14,
         fontWeight: FontWeight.w600
