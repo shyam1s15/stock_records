@@ -84,6 +84,7 @@ class StockListingPage extends GetView<ListingController> {
                             style: TextStyle(fontSize: 16),
                           ),
                           style: ElevatedButton.styleFrom(
+                            backgroundColor: index+1 == controller.page ? Colors.lightGreen : Colors.lightBlue[50],
                             foregroundColor: Colors.blue, // Button color
                             padding: EdgeInsets.symmetric(horizontal: 12),
                           ),

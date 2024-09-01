@@ -108,6 +108,7 @@ class ListingController extends GetxController with StateMixin {
         await apiservice.getStockRecordList(index, selectedSortOption, search);
 
     stockData.clear();
+    page = index+1;
     if (apiResp.errorInfo.error > 0) {
     } else {
       //print(apiResp.content?.records?.first.id?.oid);
