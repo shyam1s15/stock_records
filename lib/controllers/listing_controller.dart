@@ -91,6 +91,7 @@ class ListingController extends GetxController with StateMixin {
           //print(apiResp.content?.records?.first.id?.oid);
           if (apiResp.content?.records != null) {
             stockData.addAll(apiResp.content!.records!);
+            page = pageId;
           }
         }
       }
@@ -108,7 +109,7 @@ class ListingController extends GetxController with StateMixin {
         await apiservice.getStockRecordList(index, selectedSortOption, search);
 
     stockData.clear();
-    page = index+1;
+    page = index + 1;
     if (apiResp.errorInfo.error > 0) {
     } else {
       //print(apiResp.content?.records?.first.id?.oid);
