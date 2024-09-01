@@ -1,5 +1,6 @@
 import 'package:stock_records/controllers/app_preference_service.dart';
 import 'package:stock_records/models/stock_record_list.dart';
+import 'package:stock_records/models/stock_settings_model.dart';
 import 'package:stock_records/network/base_provider.dart';
 import 'package:stock_records/network/response_model.dart';
 import 'package:stock_records/network/typedef.dart';
@@ -9,11 +10,12 @@ class Apiservice {
 
   Apiservice(this._baseProvider);
 
-  Future<ResponseModel<StockRecordList?>> getStockRecordList(int page, String? sortType, String? search) async {
+  Future<ResponseModel<StockRecordList?>> getStockRecordList(
+      int page, String? sortType, String? search) async {
     return post(StockRecordList.fromJson,
         endpoint:
             "https://asia-south1-sheraa-95d17.cloudfunctions.net/stock-records-listing",
-        body: {'page': page, 'sort_type' : sortType, 'search': search});
+        body: {'page': page, 'sort_type': sortType, 'search': search});
   }
 
   Future<ResponseModel<void>> updateStockRecords() async {
@@ -59,10 +61,23 @@ class Apiservice {
     }
   }
 
-  Future<void> saveTargetPriceAndNote(String? id, double? target, String note) {
+  Future<void> saveTargetPriceAndNote(
+      String? id, double? target, String note, int? lastPageId) {
     return post(null,
         endpoint:
             "https://asia-south1-sheraa-95d17.cloudfunctions.net/stock_record_target_function",
-        body: {"id": id, "target_price": target, "note": note});
+        body: {
+          "id": id,
+          "target_price": target,
+          "note": note,
+          "last_page_id": lastPageId
+        });
+  }
+
+  Future<ResponseModel<StockRecordModel?>> getLastPage() async {
+     return post(
+        StockRecordModel.fromJson,
+        endpoint:
+            "https://asia-south2-sheraa-95d17.cloudfunctions.net/getStockSettings/get_stock_setings");
   }
 }

@@ -54,6 +54,7 @@ class CustomSearchDelegate extends SearchDelegate {
             }
             return StockRecordTile(
               stockRecord: listingController.stockData[index],
+              lastPageId: null,
             );
           },
         );

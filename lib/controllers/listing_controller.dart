@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:stock_records/models/sort_options.dart';
 import 'package:stock_records/models/stock_record.dart';
 import 'package:stock_records/models/stock_record_list.dart';
+import 'package:stock_records/models/stock_settings_model.dart';
 import 'package:stock_records/network/apiservice.dart';
 import 'package:stock_records/network/response_model.dart';
 
@@ -21,13 +22,13 @@ class ListingController extends GetxController with StateMixin {
     super.onInit();
     change(null, status: RxStatus.loading());
     fetchStockRecords();
-    scrollController.addListener(() {
-      if (scrollController.position.atEdge) {
-        if (scrollController.position.pixels != 0) {
-          fetchStockRecords();
-        }
-      }
-    });
+    // scrollController.addListener(() {
+    //   if (scrollController.position.atEdge) {
+    //     if (scrollController.position.pixels != 0) {
+    //       fetchStockRecords();
+    //     }
+    //   }
+    // });
   }
 
   void fetchStockRecords() async {
@@ -71,6 +72,52 @@ class ListingController extends GetxController with StateMixin {
     page = 0;
     stockData.clear();
     fetchStockRecords();
+  }
+
+  void jumpLastUpdated() async {
+    isLoading.value = true;
+    change(null, status: RxStatus.loading());
+    ResponseModel<StockRecordModel?> resp = await apiservice.getLastPage();
+    if (resp.content?.settings != null) {
+      int? pageId = resp.content!.settings!.lastPageId;
+      print(pageId);
+      if (pageId != null && pageId > 0 && pageId > page) {
+        ResponseModel<StockRecordList?> apiResp = await apiservice
+            .getStockRecordList(pageId, selectedSortOption, search);
+
+        stockData.clear();
+        if (apiResp.errorInfo.error > 0) {
+        } else {
+          //print(apiResp.content?.records?.first.id?.oid);
+          if (apiResp.content?.records != null) {
+            stockData.addAll(apiResp.content!.records!);
+          }
+        }
+      }
+    }
+
+    isLoading.value = false;
+    change(page, status: RxStatus.success());
+  }
+
+  void jumpToNewPage(int index) async {
+    isLoading.value = true;
+    change(null, status: RxStatus.loading());
+
+    ResponseModel<StockRecordList?> apiResp =
+        await apiservice.getStockRecordList(index, selectedSortOption, search);
+
+    stockData.clear();
+    if (apiResp.errorInfo.error > 0) {
+    } else {
+      //print(apiResp.content?.records?.first.id?.oid);
+      if (apiResp.content?.records != null) {
+        stockData.addAll(apiResp.content!.records!);
+      }
+    }
+
+    isLoading.value = false;
+    change(page, status: RxStatus.success());
   }
 
   @override

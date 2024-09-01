@@ -3,12 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:stock_records/controllers/stock_controller.dart';
 import 'package:stock_records/models/stock_record.dart';
+import 'package:stock_records/utils/ObjectUtil.dart';
 import 'package:stock_records/utils/utility.dart';
 
 class StockRecordTile extends StatefulWidget {
   StockRecord stockRecord;
+  int? lastPageId;
 
-  StockRecordTile({super.key, required this.stockRecord});
+  StockRecordTile({super.key, required this.stockRecord, required this.lastPageId});
 
   @override
   State<StockRecordTile> createState() => _StockRecordTileState();
@@ -27,9 +29,9 @@ class _StockRecordTileState extends State<StockRecordTile> {
     Color backgroundColor = Colors.white; // Default co
     if (widget.stockRecord.changePer != null) {
       if (widget.stockRecord.changePer! > 5) {
-        backgroundColor = Colors.lightGreen;
+        backgroundColor = const Color.fromARGB(255, 178, 227, 122);
       } else if (widget.stockRecord.changePer! < -5) {
-        backgroundColor = Colors.redAccent;
+        backgroundColor = Color.fromARGB(255, 224, 143, 143);
       }
     }
 
@@ -37,6 +39,11 @@ class _StockRecordTileState extends State<StockRecordTile> {
         widget.stockRecord.currentPrice, widget.stockRecord.targetPrice)) {
       backgroundColor = Colors.orange;
     }
+    MaterialColor cpColor = ObjectUtil.optDoubleWithDefault(
+                widget.stockRecord.currentPrice, 0) >
+            ObjectUtil.optDoubleWithDefault(widget.stockRecord.previousPrice, 0)
+        ? Colors.green
+        : Colors.red;
 
     return GestureDetector(
       onTap: () {
@@ -54,43 +61,135 @@ class _StockRecordTileState extends State<StockRecordTile> {
           },
         );*/
       },
-      child: Container(
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          border: const Border(bottom: BorderSide(color: Colors.grey, width: 0.5)),
-        ),
-        child: Column(
-          children: [
-            ListTile(
-              leading:
-                  const Icon(Icons.trending_up), // You can use an appropriate icon
-              title: Text(widget.stockRecord.stockName ?? 'Unknown Stock'),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Symbol: ${widget.stockRecord.stockSymbol ?? 'N/A'}'),
-                  Text(
-                      'Current Price: ₹${widget.stockRecord.currentPrice?.toStringAsFixed(2) ?? 'N/A'}'),
-                  Text(
-                      'Previous Price: ₹${widget.stockRecord.previousPrice?.toStringAsFixed(2) ?? 'N/A'}'),
-                  Text(
-                      'Change: ${widget.stockRecord.changePer?.toStringAsFixed(2) ?? 'N/A'}%'),
-                ],
-              ),
-              trailing: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Updated: ${widget.stockRecord.lastUpdated != null ? _formatDate(widget.stockRecord.lastUpdated!) : 'N/A'}',
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                ],
-              ),
-              isThreeLine: true,
+      child: Utility.isMobile(context)
+          ? mobileDeviceWidgetTile(backgroundColor, cpColor)
+          : desktopDeviceWidgetTile(backgroundColor, cpColor),
+    );
+  }
+
+  Container desktopDeviceWidgetTile(
+      Color backgroundColor, MaterialColor cpColor) {
+    return Container(
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        border:
+            const Border(bottom: BorderSide(color: Colors.grey, width: 0.5)),
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            leading: const Icon(
+                Icons.trending_up), // You can use an appropriate icon
+            title: Row(
+              children: [
+                Text(widget.stockRecord.stockName ?? 'Unknown Stock'),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'CP: ₹${widget.stockRecord.currentPrice?.toStringAsFixed(2) ?? 'N/A'}',
+                  style: TextStyle(color: cpColor),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'PP: ₹${widget.stockRecord.previousPrice?.toStringAsFixed(2) ?? 'N/A'}',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ],
             ),
-            _buildHiddenTile()
-          ],
-        ),
+            // subtitle: Column(
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: [
+            //     Text('Symbol: ${widget.stockRecord.stockSymbol ?? 'N/A'}'),
+            //     Text(
+            //         'Current Price: ₹${widget.stockRecord.currentPrice?.toStringAsFixed(2) ?? 'N/A'}'),
+            //     Text(
+            //         'Previous Price: ₹${widget.stockRecord.previousPrice?.toStringAsFixed(2) ?? 'N/A'}'),
+            //     Text(
+            //         'Change: ${widget.stockRecord.changePer?.toStringAsFixed(2) ?? 'N/A'}%'),
+            //   ],
+            // ),
+            subtitle: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${widget.stockRecord.stockSymbol ?? 'N/A'}'),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'Change: ${widget.stockRecord.changePer?.toStringAsFixed(2) ?? 'N/A'}%',
+                  style: TextStyle(color: cpColor),
+                )
+              ],
+            ),
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Updated: ${widget.stockRecord.lastUpdated != null ? _formatDate(widget.stockRecord.lastUpdated!) : 'N/A'}',
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ],
+            ),
+            isThreeLine: false,
+          ),
+          _buildHiddenTile()
+        ],
+      ),
+    );
+  }
+
+  Container mobileDeviceWidgetTile(
+      Color backgroundColor, MaterialColor cpColor) {
+    return Container(
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        border:
+            const Border(bottom: BorderSide(color: Colors.grey, width: 0.5)),
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            leading: const Icon(
+                Icons.trending_up), // You can use an appropriate icon
+            title: Row(
+              children: [
+                Text(widget.stockRecord.stockName ?? 'Unknown Stock'),
+              ],
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Symbol: ${widget.stockRecord.stockSymbol ?? 'N/A'}'),
+                Text(
+                  'Current Price: ₹${widget.stockRecord.currentPrice?.toStringAsFixed(2) ?? 'N/A'}',
+                  style: TextStyle(color: cpColor),
+                ),
+                Text(
+                  'Previous Price: ₹${widget.stockRecord.previousPrice?.toStringAsFixed(2) ?? 'N/A'}',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                Text(
+                  'Change: ${widget.stockRecord.changePer?.toStringAsFixed(2) ?? 'N/A'}%',
+                  style: TextStyle(color: cpColor),
+                ),
+              ],
+            ),
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Updated: ${widget.stockRecord.lastUpdated != null ? _formatDate(widget.stockRecord.lastUpdated!) : 'N/A'}',
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ],
+            ),
+            isThreeLine: false,
+          ),
+          _buildHiddenTile()
+        ],
       ),
     );
   }
@@ -102,6 +201,7 @@ class _StockRecordTileState extends State<StockRecordTile> {
         TextEditingController(text: widget.stockRecord.note?.toString() ?? '');
 
     return ExpansionTile(
+      // tilePadding: EdgeInsets.zero,
       title: Text(widget.stockRecord.targetPrice != null
           ? 'Target Price : ${widget.stockRecord.targetPrice}'
           : 'Set Target Price'),
@@ -112,9 +212,11 @@ class _StockRecordTileState extends State<StockRecordTile> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Near Target Price'),
+                decoration:
+                    const InputDecoration(labelText: 'Near Target Price'),
                 controller: nearTargetPriceController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a near target price.';
@@ -141,7 +243,7 @@ class _StockRecordTileState extends State<StockRecordTile> {
                       double.tryParse(nearTargetPriceController.text);
                   String? note = noteController.text;
                   stockController.saveTargetPriceAndNote(
-                      widget.stockRecord.id?.oid, targetPrice, note);
+                      widget.stockRecord.id?.oid, targetPrice, note, widget.lastPageId);
 
                   setState(() {
                     widget.stockRecord.targetPrice = targetPrice;

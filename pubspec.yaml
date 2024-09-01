@@ -45,6 +45,7 @@ dependencies:
   concentric_transition: ^1.0.3
   json_annotation: ^4.9.0
   build_runner: ^2.4.11
+  scrollable_positioned_list: ^0.3.8
 
 dev_dependencies:
   flutter_test:

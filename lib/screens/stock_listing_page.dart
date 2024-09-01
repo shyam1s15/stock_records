@@ -25,7 +25,6 @@ import 'package:stock_records/widgets/stock_list_tile.dart';
 class StockListingPage extends GetView<ListingController> {
   const StockListingPage({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,20 +48,51 @@ class StockListingPage extends GetView<ListingController> {
             return _isLoading();
           }
           return Obx(() {
-            return ListView.builder(
-              controller: controller.scrollController,
-              itemCount: controller.stockData.length +
-                  (controller.isLoading.value ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index == controller.stockData.length) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return StockRecordTile(
-                  stockRecord: controller.stockData[index],
-                );
-              },
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    controller: controller.scrollController,
+                    itemCount: controller.stockData.length +
+                        (controller.isLoading.value ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index == controller.stockData.length) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return StockRecordTile(
+                        stockRecord: controller.stockData[index],
+                        lastPageId: controller.page,
+                      );
+                    },
+                  ),
+                ),
+                Container(
+                  height: 50, // Height of the button row
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 700,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: ElevatedButton(
+                          onPressed: () => controller.jumpToNewPage(index), //onPageSelected(index + 1),
+                          child: Text(
+                            '${index + 1}',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.blue, // Button color
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                )
+              ],
             );
           });
         },

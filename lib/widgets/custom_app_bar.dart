@@ -58,9 +58,10 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
                 ElevatedButton(
-                  child: const Text('Refresh'),
+                  child: const Text('Jump Last Updated'),
                   onPressed: () {
-                    listingController.refreshStockRecords();
+                    //listingController.refreshStockRecords();
+                    listingController.jumpLastUpdated();
                   },
                 ),
               ],
